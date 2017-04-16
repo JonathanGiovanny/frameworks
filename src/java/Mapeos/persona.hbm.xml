@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="entities.Persona" table="personas">
+        <id name="id_persona" type="java.lang.Integer">
+            <column  name="id_persona"></column>  
+            <generator class="increment" />
+        </id>
+        
+        <property column="cedula" name="cedula" type="java.lang.Integer"/>
+        <property column="nombre" name="nombre" type="string"/>
+        <property column="apellido" name="apellido" type="string"/>
+        <property column="fecha_nacimiento" name="fecha_nacimiento" type="java.sql.Date"/>
+        <property column="telefono" name="telefono" type="string"/>
+        <property column="direccion" name="direccion" type="string"/>
+        <property column="correo" name="correo" type="string"/>
+        <property column="sexo" name="sexo" type="string"/>
+        <property column="usuario" name="usuario" type="string"/>
+        <property column="contrasenia" name="contrasenia" type="string"/>
+
+         <set name="listaFacturasCompra"  cascade="all" >
+            <key column="id_cliente" />
+            <one-to-many class="entities.Factura" />
+        </set>
+        
+        <set name="listaFacturasVenta"  cascade="all" >
+            <key column="id_cajero" />
+            <one-to-many class="entities.Factura" />
+        </set>
+        
+        <property name="tipo_persona" column="tipo_persona">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">entities.TipoPersona</param>
+                <param name="type">12</param>
+            </type>
+        </property>
+
+    </class>
+</hibernate-mapping>

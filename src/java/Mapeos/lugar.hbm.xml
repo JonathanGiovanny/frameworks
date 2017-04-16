@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="entities.Lugar" table="lugares">
+        <id name="id_lugar" type="java.lang.Integer">
+            <column  name="id_lugar"></column> 
+            <generator class="increment" /> 
+        </id>
+        
+        <property column="nombre_lugar" name="nombre_lugar" type="string"/>
+        
+        
+        <many-to-one name="id_ubicacion">
+            <column name="id_ubicacion"  />
+        </many-to-one>
+        
+        <set name="listaSucursales"  cascade="all" >
+            <key column="id_lugar" />
+            <one-to-many class="entities.Sucursal" />
+        </set>
+        
+        <set name="listaLugares" cascade="all" >
+            <key column="id_ubicacion" />
+            <one-to-many class="entities.Lugar" />
+        </set>
+
+        <property name="tipo_lugar" column="tipo_lugar">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">entities.TipoLugar</param>
+                <param name="type">12</param>
+            </type>
+        </property>
+    </class>
+  
+
+</hibernate-mapping>

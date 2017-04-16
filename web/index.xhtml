@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Categorias</title>
+    </h:head>
+ <h:body>
+     <div>
+        #{CategoriaBean.loadCategorias()}
+        <p:dataTable var="cat" value="#{CategoriaBean.listCat}" scrollable="true" scrollWidth="100%" scrollHeight="150">
+            <p:column headerText="Código" width="100" >
+                <h:outputText value="#{cat.get(0)}" />
+            </p:column>
+
+            <p:column headerText="Nombre" width="200">
+                <h:outputText value="#{cat.get(1)}" />
+            </p:column>
+        </p:dataTable>
+         </div>
+ </h:body>
+</html>

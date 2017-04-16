@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+  <class name="entities.Categoria" table="categorias">
+        <id name="id_categoria" type="java.lang.Integer">
+            <column  name="id_categoria"></column>  
+            <generator class="increment" />
+        </id>
+        
+        <property column="nombre_categoria" name="nombre_categoria" type="string"/>
+        
+        <many-to-one name="id_categoriapadre">
+            <column name="id_categoriapadre"  />
+        </many-to-one>
+        
+        <set name="listaProductos"  cascade="all">
+            <key column="id_producto" />
+            <one-to-many class="entities.Producto" />
+        </set>
+        
+        <set name="listaCategorias" cascade="all" >
+            <key column="id_categoriapadre" />
+            <one-to-many class="entities.Categoria" />
+        </set>
+        
+    </class>
+
+</hibernate-mapping>
