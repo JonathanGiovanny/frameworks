@@ -1,23 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3c.org/1999/xhtml"
-xmlns:h="http://xmlns.jcp.org/jsf/html"
-xmlns:p="http://primefaces.org/ui">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Categorias</title>
+        <title> Supermercado Frame </title>
     </h:head>
- <h:body>
-     <div>
-        #{CategoriaBean.loadCategorias()}
-        <p:dataTable var="cat" value="#{CategoriaBean.listCat}" scrollable="true" scrollWidth="100%" scrollHeight="150">
-            <p:column headerText="Código" width="100" >
-                <h:outputText value="#{cat.get(0)}" />
-            </p:column>
+    <style type="text/css">
+   .ui-state-hover {background-color: rgb(74,77,79)}
+</style>
+    
+    <body style="padding: 0px; font-family: arial">
+        <div style="min-width:400px;min-height:150px;background-color: rgb(43,46,49)">
+            <div ><img style="width: 257px; height: 130px; margin-top: 20px; margin-left: 30px" src="images/canasta.jpg"></img></div>
+            <div ><h1 align="center" style="margin-top: -70px;color: rgb(255,255,255)">SUPERMERCADO FRAME</h1></div>
+        </div>
+        <div style="margin-top: -20px">
+            <h:form>
+                <p:menubar style="background-color: rgb(74,77,79)">
+                <p:menuitem value="INICIO" style="padding-top: 15px" url="index.xhtml" icon="ui-icon-home" />
+                <f:facet name="options">
+                    <p:menubar>
+                        <p:submenu label="#{indexBean.user}" icon="ui-icon-person" >
+                            <p:menuitem value="Cambiar contraseña" url="CambioContrasenia.xhtml" rendered="#{indexBean.isUser}"/>
+                            <p:menuitem value="Salir" actionListener="#{indexBean.exit(actionEvent)}"/>
+                        </p:submenu>
+                    </p:menubar>
+                </f:facet>
+            </p:menubar>
+            </h:form>
+        </div>
+        <div>
+        <h:form>
+            <p:growl id="msgs" showDetail="true" />
+            <p:menu style="font-size: 16px">
+                        <p:menuitem url="Productos.xhtml" value="Productos"/>
+                        <p:menuitem url="Categorias.xhtml" value="Categorias"/>
+                        <p:menuitem url="Sucursales.xhtml" value="Sucursales"/>
+                        <p:menuitem url="Lugares.xhtml" value="Lugares"/>
+                        <p:menuitem url="Personas.xhtml"  value="Personas"/>
+                        <p:menuitem url="Proveedores.xhtml" value="Proveedores"/>
+                        <p:menuitem url="Facturas.xhtml" value="Facturas"/>
+                    </p:menu>
+                    
+               
+            <div style="min-width:1114px;min-height:65px; position:absolute; left:226px;top:222px">
 
-            <p:column headerText="Nombre" width="200">
-                <h:outputText value="#{cat.get(1)}" />
-            </p:column>
-        </p:dataTable>
+                <div style=" margin-top:-20px; min-width:1114px;height:55px;background-color: rgb(235,119,14) ">
+                        <div><h2  align="center" style="color: rgb(255,255,255)">CATEGORIAS A INGRESAR</h2></div>
+                </div>
+                
+                
+                <div>
+                #{CategoriaBean.loadCategorias()}
+                <p:dataTable var="cat" value="#{CategoriaBean.listCat}" scrollable="true" scrollWidth="100%" scrollHeight="150">
+                    <p:column headerText="Código" width="100" >
+                        <h:outputText value="#{cat.get(0)}" />
+                    </p:column>
+
+                <p:column headerText="Nombre" width="200">
+                    <h:outputText value="#{cat.get(1)}" />
+                 </p:column>
+                </p:dataTable>
+                </div>
+                
+                <div style="background-color: rgb(74,77,79); margin-top: -27px">
+                    <h5 align="center" style="text-align: center;min-height: 24px;background-color: rgb(100,100,100); margin-bottom: 0px;padding-top: 10px; font-size: 16px"> Supermercado Frame. Todos los derechos Reservados &reg;2017</h5>
+                </div>
+            </div>
+
+        </h:form>
          </div>
- </h:body>
+    </body>
 </html>
