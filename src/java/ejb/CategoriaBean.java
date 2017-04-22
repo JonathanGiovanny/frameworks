@@ -55,6 +55,11 @@ public class CategoriaBean {
             Categoria c = consultar(fila.get(1));
             if(c == null){
                 c = new Categoria();
+                c.setNombre_categoria(fila.get(1));
+                if(fila.get(2)!= null){
+                    c.setId_categoriapadre(consultar(fila.get(2)));
+                }
+                session.save(c);
             }
             
         }
