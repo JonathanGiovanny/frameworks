@@ -13,9 +13,15 @@ import java.util.List;
  */
 public class Validaciones {
     
-    public boolean exists(String id, List<String> ids){
+    public static boolean exists(String id, List<String> ids){
         return ids.contains(id);
     }
-    
-    
+
+    public static List<List<String>> eliminarColumna(List<List<String>> matriz, int numColumna){
+        for(List<String> fila : matriz){
+            fila.remove(numColumna);
+        }
+        
+        return matriz;
+    }
 }

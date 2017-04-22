@@ -34,16 +34,16 @@ public class HibernateUtil {
     }
 
     public static void commit() {
-        session.getTransaction().commit();
-        System.out.println("Haciendo Commit");
-
+        if (!session.getTransaction().wasCommitted()) {
+            session.getTransaction().commit();
+        }
     }
 
     public static Session getSession() {
         return session;
     }
-    
-    public static void setSession(){
+
+    public static void setSession() {
         session = null;
     }
 
