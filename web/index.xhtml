@@ -63,6 +63,8 @@
                     <h:outputText value="#{cat.get(1)}" />
                  </p:column>
                 </p:dataTable>
+                    
+                    <p:commandButton  icon="ui-icon-check" update="msgs"  actionListener="#{CategoriaBean.guardar(actionEvent)}" value="Cambiar" />
                 </div>
                 
                 <div style="background-color: rgb(74,77,79); margin-top: -27px">
