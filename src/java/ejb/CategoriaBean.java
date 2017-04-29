@@ -11,13 +11,10 @@ import entities.Categoria;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.primefaces.event.RowEditEvent;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
 
