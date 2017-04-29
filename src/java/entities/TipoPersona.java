@@ -10,5 +10,5 @@ package entities;
  * @author RA302
  */
 public enum TipoPersona {
-    CJ, CC;
+    CJ, CC, AD;
 }
