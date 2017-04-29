@@ -48,20 +48,21 @@ public class Validaciones {
     }
 
     public static Date validarFechas(String fecha) {
-        if (fecha.length() <= 8) {
+        if (fecha.length() < 8) {
             fecha = fecha.concat("-01");
         }
 
         SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yy");
         Date resultado = null;
-
+        System.out.println("Bandera 1: " + resultado);
         try {
             resultado = formato.parse(fecha);
         } catch (Exception e) {
             System.out.println("Formato no valido");
         }
+        System.out.println("Bandera 2: " + resultado);
 
-        if (resultado != null) {
+        if (resultado == null) {
             try {
                 formato = new SimpleDateFormat("dd/mm/yyyy");
                 resultado = formato.parse(fecha);
@@ -69,8 +70,9 @@ public class Validaciones {
                 System.out.println("Formato no valido");
             }
         }
+        System.out.println("Bandera 3: " + resultado);
 
-        if (resultado != null) {
+        if (resultado == null) {
             try {
                 formato = new SimpleDateFormat("dd-mm-yyyy");
                 resultado = formato.parse(fecha);
@@ -78,8 +80,9 @@ public class Validaciones {
                 System.out.println("Formato no valido");
             }
         }
+        System.out.println("Bandera 4: " + resultado);
 
-        if (resultado != null) {
+        if (resultado == null) {
             try {
                 formato = new SimpleDateFormat("dd-mm-yy");
                 resultado = formato.parse(fecha);
@@ -87,8 +90,9 @@ public class Validaciones {
                 System.out.println("Formato no valido");
             }
         }
+        System.out.println("Bandera 5: " + resultado);
 
-        if (resultado != null) {
+        if (resultado == null) {
             try {
                 formato = new SimpleDateFormat("yyyy-mm-dd");
                 resultado = formato.parse(fecha);
@@ -96,6 +100,7 @@ public class Validaciones {
                 System.out.println("Formato no valido");
             }
         }
+        System.out.println("Bandera 6: " + resultado);
         
         return resultado;
     }
