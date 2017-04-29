@@ -17,7 +17,7 @@ public class PersonaDTO implements Serializable{
     private String cedula;
     private String nombre;
     private String apellido;
-    private Date fecha_nacimiento;
+    private String fecha_nacimiento;
     private String telefono;
     private String direccion;
     private String correo;
@@ -29,7 +29,7 @@ public class PersonaDTO implements Serializable{
     public PersonaDTO() {
     }
 
-    public PersonaDTO(String cedula, String nombre, String apellido, Date fecha_nacimiento, String telefono, String direccion, String correo, String sexo, TipoPersona tipo_persona, String usuario, String contrasenia) {
+    public PersonaDTO(String cedula, String nombre, String apellido, String fecha_nacimiento, String telefono, String direccion, String correo, String sexo, TipoPersona tipo_persona, String usuario, String contrasenia) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -71,11 +71,11 @@ public class PersonaDTO implements Serializable{
         this.apellido = apellido;
     }
 
-    public Date getFecha_nacimiento() {
+    public String getFecha_nacimiento() {
         return fecha_nacimiento;
     }
 
-    public void setFecha_nacimiento(Date fecha_nacimiento) {
+    public void setFecha_nacimiento(String fecha_nacimiento) {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 

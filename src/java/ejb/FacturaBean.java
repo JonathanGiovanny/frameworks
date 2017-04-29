@@ -58,7 +58,7 @@ public class FacturaBean {
             } catch (NumberFormatException e) {
                 System.out.println("Id factura no es numerico, se deja enblanco para autogenerar");
             }
-            fac.setFechaFactura(new java.sql.Date(validarFechas(fila.get(2)).getTime()));
+            fac.setFechaFactura(new java.sql.Date(Validaciones.validarFechas(fila.get(2)).getTime()));
             String tipoFac = fila.get(3) != null && fila.get(3).charAt(0) == 'C' ? "FC" : "FV";
             fac.setTipoFactura(tipoFac);
             if ("FC".equals(tipoFac)) {
@@ -70,38 +70,6 @@ public class FacturaBean {
 
             listFac.add(fac);
         }
-    }
-
-    private Date validarFechas(String fecha) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy");
-        Date resultado = null;
-
-        try {
-            resultado = sdf.parse(fecha);
-            return resultado;
-        } catch (Exception e) {
-            System.out.println("Formato no valido");
-        }
-
-        if (resultado != null) {
-            try {
-                sdf = new SimpleDateFormat("dd/mm/yyyy");
-                resultado = sdf.parse(fecha);
-            } catch (Exception e) {
-                System.out.println("Formato no valido");
-            }
-        }
-
-        if (resultado != null) {
-            try {
-                sdf = new SimpleDateFormat("dd-mm-yyyy");
-                resultado = sdf.parse(fecha);
-            } catch (Exception e) {
-                System.out.println("Formato no valido");
-            }
-        }
-
-        return resultado;
     }
 
     public void guardar(ActionEvent actionEvent) {

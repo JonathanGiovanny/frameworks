@@ -45,18 +45,15 @@ public class PersonaBean {
 
             for (int i = 1; i < personas.size(); i++) {
                 List<String> fila = personas.get(i);
-                for(int j = 1; j < fila.size(); j++){
-                    System.out.println(fila.get(j));
-                }
                 
                 PersonaDTO perDTO;
                 if(fila.size()==11){
                     perDTO = new PersonaDTO(fila.get(0), fila.get(2), fila.get(3), 
-                        formatearFecha(fila.get(8)), fila.get(6), " ", fila.get(5), 
+                        fila.get(8), fila.get(6), " ", fila.get(5), 
                         validarGenero(fila.get(4)), validarTipoPersona(fila.get(7)), fila.get(9), fila.get(10));
                 }else{
                     perDTO = new PersonaDTO(fila.get(0), fila.get(2), fila.get(3), 
-                        formatearFecha(fila.get(9)), fila.get(6), fila.get(7), fila.get(5), 
+                        fila.get(9), fila.get(6), fila.get(7), fila.get(5), 
                         validarGenero(fila.get(4)), validarTipoPersona(fila.get(8)), fila.get(10), fila.get(11));
                 }
                     
@@ -89,36 +86,9 @@ public class PersonaBean {
     }
 
     public List<List<String>> validarColumnas(List<List<String>> categorias) {
-        List<List<String>> resultado = Validaciones.eliminarColumna(categorias, 9);
+        List<List<String>> resultado = Validaciones.eliminarColumna(categorias, 10);
         
         return resultado;
-    }
-
-    public String validarFecha(String fecha) {
-        SimpleDateFormat parseador = new SimpleDateFormat("dd-MM-yy");
-        SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = null;
-        try {
-            d = (Date) parseador.parse(fecha);
-        } catch (ParseException ex) {
-            Logger.getLogger(PersonaBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return formateador.format(d);
-    }
-
-    public Date formatearFecha(String fecha) {
-        String aux = fecha;
-        if (fecha.contains("/")) {
-            String[] fields = fecha.split("/");
-            aux = fields[2] + "-" + fields[1] + "-" + fields[0];
-        }
-        if (fecha.length() <= 8) {
-            aux = validarFecha(fecha);
-        }
-        String[] fields = aux.split("-");
-
-        return new Date(Integer.parseInt(fields[0]), Integer.parseInt(fields[1]), Integer.parseInt(fields[2]));
     }
 
     public void guardar(ActionEvent actionEvent) {
@@ -132,7 +102,7 @@ public class PersonaBean {
                 p.setCedula(Integer.parseInt(fila.getCedula()));
                 p.setNombre(fila.getNombre());
                 p.setApellido(fila.getApellido());
-                p.setFecha_nacimiento(fila.getFecha_nacimiento());
+                p.setFecha_nacimiento(new java.sql.Date(Validaciones.validarFechas(fila.getFecha_nacimiento()).getTime()));
                 p.setTelefono(fila.getTelefono());
                 p.setDireccion(fila.getDireccion());
                 p.setCorreo(fila.getCorreo());

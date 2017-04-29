@@ -42,7 +42,7 @@ public class LeerCSV {
                 List<String> fila = new ArrayList<>();
 
                 for (String s : fields) {
-                    fila.add(s == null ? "" : s);
+                    fila.add(s == null ? "" : Validaciones.palabra(s));
                 }
 
                 line = br.readLine();
