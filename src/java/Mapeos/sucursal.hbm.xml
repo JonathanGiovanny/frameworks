@@ -7,7 +7,8 @@
 <hibernate-mapping>
     <class name="entities.Sucursal" table="sucursales">
         <id name="id_sucursal" type="java.lang.Integer">
-            <column  name="id_sucursal"></column>  
+            <column  name="id_sucursal"></column>
+            <generator class="increment" />  
         </id>
         
         <property column="nombre_sucursal" name="nombre_sucursal" type="string"/>
