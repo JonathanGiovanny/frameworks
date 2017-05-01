@@ -65,9 +65,11 @@ public class LugarBean {
         session = HibernateUtil.getSession();
 
         for (LugarDTO fila : listLug) {
-            Lugar l = consultar(fila.getNombre_lugar(), fila.getTipo_lugar());
-            if (l == null) {
-                l = new Lugar();
+            boolean aux = consultar(fila.getNombre_lugar(), fila.getId_ubicacion());
+            if (!aux) {
+                TipoLugar tipoPadre= fila.getTipo_lugar().equalsIgnoreCase("CIUDAD") ? TipoLugar.D: 
+                        fila.getTipo_lugar().equalsIgnoreCase("DEPARTAMENTO") ? TipoLugar.P : null; 
+                Lugar l = new Lugar();
                 l.setNombre_lugar(fila.getNombre_lugar());
                 if(fila.getTipo_lugar().equalsIgnoreCase("CIUDAD")){
                      l.setTipo_lugar(TipoLugar.C);
@@ -80,7 +82,7 @@ public class LugarBean {
                 }
                 
                 if (fila.getId_ubicacion() != null) {
-                    l.setId_ubicacion(consultar(fila.getId_ubicacion(), fila.getTipo_lugar()));
+                    l.setId_ubicacion(extraerPadre(fila.getId_ubicacion(), tipoPadre));
                 }
                 session.flush();
                 session.save(l);
@@ -91,24 +93,59 @@ public class LugarBean {
     }
     
     public void validarLugar(String l, TipoLugar tipo){
-        if(consultar(l, tipo.toString())== null){
+        if(!consultarPadre(l)){
             Lugar lug = new Lugar();
             lug.setNombre_lugar(l);
             lug.setTipo_lugar(tipo);
+            System.out.println("creado el padre: "+lug.getNombre_lugar());
+            session.flush();
             session.save(lug);
         }
     }
             
 
-    private Lugar consultar(String nombre, String tipo) {
-        String sql = "SELECT distinct l FROM Lugar l WHERE l.nombre_lugar = :nombrec ";
+    private boolean consultar(String nombre, String ubicacion) {
+        String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec ";
         Query q = session.createQuery(sql).setParameter("nombrec", nombre);
         List<Lugar> l= q.list();
+        boolean estado= false;
         for (int i = 0; i < l.size(); i++) {
-            System.out.println(l.get(i).getNombre_lugar());
+            if(l.get(i).getId_ubicacion() != null){
+                if(l.get(i).getId_ubicacion().getNombre_lugar().equalsIgnoreCase(ubicacion)){
+                estado=true;  
+            }
+            }
+            
         }
-        System.out.println(q.toString());
-        return (Lugar) q.uniqueResult();
+        
+        return estado;
+    }
+    
+    public boolean consultarPadre(String nombre){
+        String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec ";
+        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
+        List<Lugar> l= q.list();
+        boolean estado= false;
+        for (int i = 0; i < l.size(); i++) {
+            if(l.get(i).getNombre_lugar().equalsIgnoreCase(nombre)){
+                estado=true;
+            }
+        }
+       return estado; 
+    }
+    
+    public Lugar extraerPadre(String nombre, TipoLugar tipo){
+        String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec and l.tipo_lugar= :tipo ";
+         Query q = session.createQuery(sql).setParameter("nombrec", nombre).setParameter("tipo", tipo);
+         Lugar l;
+         try {
+         l= (Lugar)q.uniqueResult();
+             //System.out.println("padre extraido "+ l.getNombre_lugar() );
+        } catch (Exception e) {
+                List<Lugar> lista=q.list();
+                l=lista.get(0);
+            }
+         return l;
     }
 
     public List<LugarDTO> getListLug() {

@@ -19,7 +19,7 @@
         </many-to-one>
         
         <set name="listaProductos"  cascade="all">
-            <key column="id_producto" />
+            <key column="id_categoria" />
             <one-to-many class="entities.Producto" />
         </set>
         

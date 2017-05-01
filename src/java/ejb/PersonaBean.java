@@ -120,7 +120,7 @@ public class PersonaBean {
 
     private Persona consultar(String nombre) {
         String sql = "FROM Persona p WHERE p.cedula = :nombrec";
-        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
+        Query q = session.createQuery(sql).setParameter("nombrec", Integer.parseInt(nombre));
 
         return (Persona) q.uniqueResult();
     }

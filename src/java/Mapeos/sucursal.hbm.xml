@@ -14,6 +14,10 @@
         <property column="nombre_sucursal" name="nombre_sucursal" type="string"/>
         <property column="direccion" name="direccion" type="string"/>
         
+        <many-to-one name="id_lugar">
+            <column name="id_lugar"  />
+        </many-to-one>
+        
         <set name="listaFacturas"  cascade="all" >
             <key column="id_sucursal" />
             <one-to-many class="entities.Factura" />

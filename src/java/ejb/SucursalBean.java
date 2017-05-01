@@ -86,8 +86,15 @@ public class SucursalBean {
     private Lugar consultarLugar(String nombre) {
         String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec";
         Query q = session.createQuery(sql).setParameter("nombrec", nombre);
-
-        return (Lugar) q.uniqueResult();
+        Lugar l;
+         try {
+         l= (Lugar)q.uniqueResult();
+             System.out.println(" lugar extraido: "+l.getNombre_lugar());
+        } catch (Exception e) {
+                List<Lugar> lista=q.list();
+                l=lista.get(0);
+            }
+        return l;
     }
 
     public List<SucursalDTO> getListSuc() {

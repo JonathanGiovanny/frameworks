@@ -95,8 +95,17 @@ public class ProductoBean {
     private Categoria consultarCategoria(String nombre){
         String sql = "FROM Categoria c WHERE c.nombre_categoria = :nombrec";
         Query q = session.createQuery(sql).setParameter("nombrec", nombre);
-
-        return (Categoria) q.uniqueResult();
+        System.out.println("");
+        
+        Categoria c;
+         try {
+         c= (Categoria)q.uniqueResult();
+             System.out.println(" lugar extraido: "+c.getNombre_categoria());
+        } catch (Exception e) {
+                List<Categoria> lista=q.list();
+                c=lista.get(0);
+            }
+        return c;
     }
 
     public List<ProductoDTO> getListProd() {

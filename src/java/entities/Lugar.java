@@ -6,6 +6,7 @@
 package entities;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -17,8 +18,8 @@ public class Lugar {
     private String nombre_lugar;
     private Lugar id_ubicacion;
     private TipoLugar tipo_lugar;
-    private List<Sucursal> listaSucursales;
-    private List<Lugar> listaLugares;
+    private Set<Sucursal> listaSucursales;
+    private Set<Lugar> listaLugares;
     
 
     public int getId_lugar() {
@@ -55,21 +56,22 @@ public class Lugar {
         this.id_ubicacion = id_ubicacion;
     }
 
-    public List<Sucursal> getListaSucursales() {
+    public Set<Sucursal> getListaSucursales() {
         return listaSucursales;
     }
 
-    public void setListaSucursales(List<Sucursal> listaSucursales) {
+    public void setListaSucursales(Set<Sucursal> listaSucursales) {
         this.listaSucursales = listaSucursales;
     }
 
-    public List<Lugar> getListaLugares() {
+    public Set<Lugar> getListaLugares() {
         return listaLugares;
     }
 
-    public void setListaLugares(List<Lugar> listaLugares) {
+    public void setListaLugares(Set<Lugar> listaLugares) {
         this.listaLugares = listaLugares;
     }
+
     
     
     
