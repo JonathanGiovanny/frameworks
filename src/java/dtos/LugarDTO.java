@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author JulioCesar
+ * @author ASUS1
  */
 public class LugarDTO implements Serializable{
     

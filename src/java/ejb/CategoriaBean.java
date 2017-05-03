@@ -14,7 +14,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
 
@@ -27,7 +26,6 @@ import utilidades.Validaciones;
 public class CategoriaBean {
 
     private List<CategoriaDTO> listCat;
-    private Session session;
 
     public void loadCategorias() {
         listCat = new ArrayList<>();
@@ -37,8 +35,7 @@ public class CategoriaBean {
             List<List<String>> categorias = leerCsv.getData("D:/Categorias.csv");
             categorias = validarColumnas(categorias);
 
-            for (int i = 1; i < categorias.size(); i++) {
-                List<String> fila = categorias.get(i);
+            for (List<String> fila : categorias) {
                 CategoriaDTO catDTO = new CategoriaDTO(fila.get(1), fila.get(0));
                 listCat.add(catDTO);
             }
@@ -58,27 +55,34 @@ public class CategoriaBean {
 
     public void guardar(ActionEvent actionEvent) {
         HibernateUtil.start();
-        session = HibernateUtil.getSession();
 
-        for (CategoriaDTO fila : listCat) {
-            Categoria c = consultar(fila.getCatNombre());
-            if (c == null) {
-                c = new Categoria();
-                c.setNombre_categoria(fila.getCatNombre());
-                if (fila.getCatPadre() != null) {
-                    c.setId_categoriapadre(consultar(fila.getCatPadre()));
+        try {
+            for (CategoriaDTO fila : listCat) {
+                Categoria c = consultar(fila.getCatNombre());
+                if (c == null) {
+                    c = new Categoria();
+                    c.setNombre_categoria(fila.getCatNombre());
+                    if (fila.getCatPadre() != null) {
+                        c.setId_categoriapadre(consultar(fila.getCatPadre()));
+                    }
+                    
+                    HibernateUtil.getSession().save(c);
                 }
-                session.flush();
-                session.save(c);
             }
-        }
 
-        HibernateUtil.commit();
+            HibernateUtil.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            HibernateUtil.close();
+        }
     }
 
     private Categoria consultar(String nombre) {
         String sql = "FROM Categoria c WHERE c.nombre_categoria = :nombrec";
-        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre);
 
         return (Categoria) q.uniqueResult();
     }

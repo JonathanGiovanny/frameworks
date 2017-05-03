@@ -7,19 +7,12 @@
 <hibernate-mapping>
     <class name="entities.Item" table="ITEM" >
          <composite-id class="entities.ItemPk" name="itemPk">
-            <key-property column="id_factura" name="id_factura" type="java.lang.Integer"/>
-            <key-property column="id_producto" name="id_producto" type="java.lang.Integer"/>
+            <key-many-to-one column="id_factura" name="id_factura" class="entities.Factura"/>
+            <key-many-to-one column="id_producto" name="id_producto" class="entities.Producto"/>
         </composite-id>
         
         <property column="precio" name="precio" type="java.lang.Double" />
         <property column="cantidad"  name="cantidad" type="java.lang.Integer" />
-        
-        <many-to-one name="id_producto" insert="false" update="false">
-            <column name="id_producto" />
-        </many-to-one>
-         
-        <many-to-one name="id_factura" insert="false" update="false">
-            <column name="id_factura" />
-        </many-to-one>
+
     </class>
 </hibernate-mapping>

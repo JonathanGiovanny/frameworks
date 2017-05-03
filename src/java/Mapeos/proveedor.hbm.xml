@@ -21,8 +21,6 @@
             <key column="id_proveedor" />
             <one-to-many class="entities.Factura" />
         </set>
-
     </class>
   
-
 </hibernate-mapping>

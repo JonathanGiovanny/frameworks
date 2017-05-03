@@ -18,6 +18,10 @@
         <property column="cantidad_minima" name="cantidad_minima" type="java.lang.Integer" />
         <property column="marca" name="marca" type="string" />
 
+        <many-to-one name="id_categoria">
+            <column name="id_categoria"  />
+        </many-to-one>
+        
         <set name="listaItems" cascade="all" >
             <key column="id_producto"  />
             <one-to-many class="entities.Item" />

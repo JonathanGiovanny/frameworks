@@ -10,10 +10,8 @@ package entities;
  * @author RA302
  */
 public class Item {
-    
+
     private ItemPk itemPk;
-    private Factura id_factura;
-    private Producto id_producto;
     private double precio;
     private int cantidad;
 
@@ -25,25 +23,6 @@ public class Item {
         this.itemPk = itemPk;
     }
 
-    
-    
-    public Factura getId_factura() {
-        return id_factura;
-    }
-
-    public void setId_factura(Factura id_factura) {
-        this.id_factura = id_factura;
-    }
-
-    public Producto getId_producto() {
-        return id_producto;
-    }
-
-    public void setId_producto(Producto id_producto) {
-        this.id_producto = id_producto;
-    }
-
-    
     public double getPrecio() {
         return precio;
     }

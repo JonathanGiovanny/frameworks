@@ -20,11 +20,12 @@ import utilidades.Validaciones;
 
 /**
  *
- * @author JulioCesar
+ * @author ASUS1
  */
 @ManagedBean(name = "ProveedorBean")
 @SessionScoped
 public class ProveedorBean {
+
     private List<ProveedorDTO> listProv;
     private Session session;
 
@@ -36,8 +37,7 @@ public class ProveedorBean {
             List<List<String>> proveedores = leerCsv.getData("D:/Proveedores.csv");
             proveedores = validarColumnas(proveedores);
 
-            for (int i = 1; i < proveedores.size(); i++) {
-                List<String> fila = proveedores.get(i);
+            for (List<String> fila : proveedores) {
                 ProveedorDTO provDTO = new ProveedorDTO(fila.get(0), fila.get(1), fila.get(2), fila.get(3), fila.get(4));
                 listProv.add(provDTO);
             }
@@ -89,6 +89,5 @@ public class ProveedorBean {
     public void setListProv(List<ProveedorDTO> listProv) {
         this.listProv = listProv;
     }
-    
-    
+
 }

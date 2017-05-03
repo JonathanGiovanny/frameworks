@@ -5,14 +5,14 @@
  */
 package dtos;
 
-import entities.Categoria;
 import java.sql.Date;
 
 /**
  *
- * @author JulioCesar
+ * @author ASUS1
  */
 public class ProductoDTO {
+
     private String id_categoria;
     private String nombre;
     private String unidad_medida;
@@ -23,8 +23,6 @@ public class ProductoDTO {
 
     public ProductoDTO() {
     }
-    
-    
 
     public ProductoDTO(String id_categoria, String nombre, String unidad_medida, Date fecha_vencimiento, Integer stock, Integer cantidad_minima, String marca) {
         this.id_categoria = id_categoria;
@@ -35,8 +33,6 @@ public class ProductoDTO {
         this.cantidad_minima = cantidad_minima;
         this.marca = marca;
     }
-    
-    
 
     public String getId_categoria() {
         return id_categoria;
@@ -93,8 +89,5 @@ public class ProductoDTO {
     public void setMarca(String marca) {
         this.marca = marca;
     }
-    
-    
-    
-    
+
 }

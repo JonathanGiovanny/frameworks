@@ -5,7 +5,7 @@
  */
 package entities;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -17,8 +17,8 @@ public class Sucursal {
     private Lugar id_lugar;
     private String nombre_sucursal;
     private String direccion;
-    
-     private List<Factura> listaFacturas;
+
+    private Set<Factura> listaFacturas;
 
     public int getId_sucursal() {
         return id_sucursal;
@@ -52,14 +52,12 @@ public class Sucursal {
         this.direccion = direccion;
     }
 
-    public List<Factura> getListaFacturas() {
+    public Set<Factura> getListaFacturas() {
         return listaFacturas;
     }
 
-    public void setListaFacturas(List<Factura> listaFacturas) {
+    public void setListaFacturas(Set<Factura> listaFacturas) {
         this.listaFacturas = listaFacturas;
     }
-    
-    
 
 }

@@ -5,14 +5,14 @@
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="entities.Factura" table="FACTURAS" >
+    <class name="entities.Factura" table="facturas" >
         <id name="id_factura" type="java.lang.Integer">
             <column name="id_factura" />
             <generator class="increment" />
         </id>
         
+        <property column="numero_factura" name="numero_factura" type="java.lang.Integer" />
         <property column="fecha_compra" name="fecha_compra" type="java.sql.Date" />
-        
         <property name="tipo_factura" column="tipo_factura">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">entities.TipoFactura</param>
@@ -20,15 +20,15 @@
             </type>
         </property>
 
-        <many-to-one name="id_proveedor" insert="false" update="false">
+        <many-to-one name="id_proveedor">
             <column name="id_proveedor" />
         </many-to-one>
         
-        <many-to-one name="id_cajero" insert="false" update="false">
+        <many-to-one name="id_cajero">
             <column name="id_cajero" />
         </many-to-one>
         
-        <many-to-one name="id_cliente" insert="false" update="false">
+        <many-to-one name="id_cliente">
             <column name="id_cliente" />
         </many-to-one>
         

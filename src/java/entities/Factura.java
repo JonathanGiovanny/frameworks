@@ -6,7 +6,7 @@
 package entities;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -15,13 +15,15 @@ import java.util.List;
 public class Factura {
 
     private int id_factura;
+    private int numero_factura;
     private Proveedor id_proveedor;
     private Date fecha_compra;
     private TipoFactura tipo_factura;
     private Persona id_cajero;
     private Persona id_cliente;
     private Sucursal id_sucursal;
-    private List<Item> listaItems;
+
+    private Set<Item> listaItems;
 
     public int getId_factura() {
         return id_factura;
@@ -29,6 +31,14 @@ public class Factura {
 
     public void setId_factura(int id_factura) {
         this.id_factura = id_factura;
+    }
+
+    public int getNumero_factura() {
+        return numero_factura;
+    }
+
+    public void setNumero_factura(int numero_factura) {
+        this.numero_factura = numero_factura;
     }
 
     public Date getFecha_compra() {
@@ -46,8 +56,6 @@ public class Factura {
     public void setTipo_factura(TipoFactura tipo_factura) {
         this.tipo_factura = tipo_factura;
     }
-
-   
 
     public Sucursal getId_sucursal() {
         return id_sucursal;
@@ -73,11 +81,11 @@ public class Factura {
         this.id_cliente = id_cliente;
     }
 
-    public List<Item> getListaItems() {
+    public Set<Item> getListaItems() {
         return listaItems;
     }
 
-    public void setListaItems(List<Item> listaItems) {
+    public void setListaItems(Set<Item> listaItems) {
         this.listaItems = listaItems;
     }
 
@@ -88,7 +96,5 @@ public class Factura {
     public void setId_proveedor(Proveedor id_proveedor) {
         this.id_proveedor = id_proveedor;
     }
-    
-    
 
 }

@@ -8,18 +8,20 @@ package ejb;
 import Conexion.HibernateUtil;
 import dtos.FacturaDTO;
 import entities.Factura;
+import entities.Item;
+import entities.ItemPk;
 import entities.Persona;
 import entities.Proveedor;
+import entities.Producto;
 import entities.Sucursal;
 import entities.TipoFactura;
 import java.awt.event.ActionEvent;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
 
@@ -28,17 +30,17 @@ import utilidades.Validaciones;
  * @author ASUS1
  */
 @ManagedBean(name = "FacturaBean")
+@SessionScoped
 public class FacturaBean {
 
     private List<FacturaDTO> listFac;
-    private Session session;
 
     public void loadFacturas() {
         listFac = new ArrayList<>();
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> facturas = leerCsv.getData("D:/FacturasItem.csv");
+            List<List<String>> facturas = leerCsv.getData("D:/Facturas.csv");
             validarColumnas(facturas);
 
         } catch (Exception e) {
@@ -48,7 +50,8 @@ public class FacturaBean {
     }
 
     public void validarColumnas(List<List<String>> facturas) {
-        Validaciones.eliminarColumna(facturas, 5);
+        Validaciones.eliminarColumna(facturas, 6);
+
         for (List<String> fila : facturas) {
             FacturaDTO fac = new FacturaDTO();
 
@@ -58,7 +61,7 @@ public class FacturaBean {
             } catch (NumberFormatException e) {
                 System.out.println("Id factura no es numerico, se deja enblanco para autogenerar");
             }
-            fac.setFechaFactura(new java.sql.Date(Validaciones.validarFechas(fila.get(2)).getTime()));
+            fac.setFechaFactura(new Date(Validaciones.validarFechas(fila.get(2)).getTime()));
             String tipoFac = fila.get(3) != null && fila.get(3).charAt(0) == 'C' ? "FC" : "FV";
             fac.setTipoFactura(tipoFac);
             if ("FC".equals(tipoFac)) {
@@ -67,6 +70,19 @@ public class FacturaBean {
                 fac.setIdCliente(fila.get(4));
             }
             fac.setIdCajero(fila.get(5));
+            //Item
+            fac.setNombreProducto(fila.get(6));
+            fac.setFechaVencimiento(new Date(Validaciones.validarFechas(fila.get(7)).getTime()));
+            try {
+                fac.setValorUnitario(Double.parseDouble(fila.get(8).replace("$", "").replace(",", ".").trim()));
+            } catch (NumberFormatException e) {
+                System.out.println("El vampo viene con caracteres no númericos");
+            }
+            try {
+                fac.setCantidad(Integer.parseInt(fila.get(9).trim()));
+            } catch (NumberFormatException e) {
+                System.out.println("El vampo viene con caracteres no númericos");
+            }
 
             listFac.add(fac);
         }
@@ -74,67 +90,110 @@ public class FacturaBean {
 
     public void guardar(ActionEvent actionEvent) {
         HibernateUtil.start();
-        session = HibernateUtil.getSession();
 
-        for (FacturaDTO fila : listFac) {
-            Factura f = consultarFactura(fila.getIdFactura());
-           
-            if (f == null) {
-                f = new Factura();
-                f.setId_factura(fila.getIdFactura());
-                TipoFactura tipoFac = fila.getTipoFactura() != null ? TipoFactura.valueOf(fila.getTipoFactura()) : TipoFactura.FC;
-                if (tipoFac == TipoFactura.FC) {
-                    f.setId_proveedor(consultarProveedor(fila.getNombreProveedor()));
-                }
-                f.setFecha_compra(fila.getFechaFactura());
-                f.setTipo_factura(tipoFac);
-                f.setId_cajero(consultarPersona(fila.getIdCajero()));
-                if (tipoFac == TipoFactura.FV) {
-                    f.setId_cliente(consultarPersonaNombre(fila.getNombreProveedor()));
-                }
-                f.setId_sucursal(consultarSucursal(fila.getNombreSucursal()));
+        try {
+            for (FacturaDTO fila : listFac) {
+                Factura f = consultarFactura(fila.getIdFactura());
 
-                session.flush();
-                session.save(f);
+                if (f == null) {
+                    f = new Factura();
+                    f.setNumero_factura(fila.getIdFactura());
+                    TipoFactura tipoFac = fila.getTipoFactura() != null ? TipoFactura.valueOf(fila.getTipoFactura()) : TipoFactura.FC;
+                    if (tipoFac == TipoFactura.FC) {
+                        f.setId_proveedor(consultarProveedor(fila.getNombreProveedor()));
+                    }
+                    f.setFecha_compra(fila.getFechaFactura());
+                    f.setTipo_factura(tipoFac);
+                    f.setId_cajero(consultarPersona(fila.getIdCajero()));
+                    if (tipoFac == TipoFactura.FV) {
+                        f.setId_cliente(consultarPersonaNombre(fila.getNombreProveedor()));
+                    }
+                    f.setId_sucursal(consultarSucursal(fila.getNombreSucursal()));
+
+                    HibernateUtil.getSession().save(f);
+                }
             }
+
+            HibernateUtil.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.close();
         }
 
-        HibernateUtil.commit();
+        insertarItems();
+    }
+
+    private void insertarItems() {
+        HibernateUtil.start();
+
+        try {
+            for (FacturaDTO fila : listFac) {
+                ItemPk ipk = new ItemPk();
+                Factura fac = consultarFactura(fila.getIdFactura());
+                ipk.setId_factura(fac);
+                Producto prod = consultarProducto(fila.getNombreProducto());
+                ipk.setId_producto(prod);
+
+                Item item = new Item();
+                item.setItemPk(ipk);
+                item.setPrecio(fila.getValorUnitario());
+                item.setCantidad(fila.getCantidad());
+                prod.setStock(prod.getStock() - fila.getCantidad());
+
+                HibernateUtil.getSession().save(item);
+                HibernateUtil.getSession().update(prod);
+
+            }
+            HibernateUtil.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.close();
+        }
     }
 
     private Factura consultarFactura(Integer numeroFac) {
-        String sql = "FROM Factura f WHERE f.id_factura = :numero";
-        Query q = session.createQuery(sql).setParameter("numero", numeroFac);
+        String sql = "FROM Factura f WHERE f.numero_factura = :numero";
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("numero", numeroFac);
 
         return (Factura) q.uniqueResult();
     }
 
     private Persona consultarPersona(String usuario) {
         String sql = "FROM Persona p WHERE p.usuario = :nombrep";
-        Query q = session.createQuery(sql).setParameter("nombrep", usuario);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrep", usuario);
 
-        return (Persona) q.list().get(0);
+        return (Persona) q.uniqueResult();
     }
 
     private Persona consultarPersonaNombre(String nombre) {
         String sql = "FROM Persona p WHERE p.nombre = :nombrep";
-        Query q = session.createQuery(sql).setParameter("nombrep", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrep", nombre);
 
-        return (Persona) q.list().get(0);
+        return (Persona) q.uniqueResult();
     }
 
     private Sucursal consultarSucursal(String nombre) {
         String sql = "FROM Sucursal s WHERE s.nombre_sucursal = :nombres";
-        Query q = session.createQuery(sql).setParameter("nombres", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombres", nombre);
 
-        return (Sucursal) q.list().get(0);
+        return (Sucursal) q.uniqueResult();
     }
 
     private Proveedor consultarProveedor(String nombre) {
         String sql = "FROM Proveedor p WHERE p.nombre = :nombrep";
-        Query q = session.createQuery(sql).setParameter("nombrep", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrep", nombre);
 
-        return (Proveedor) q.list().get(0);
+        return (Proveedor) q.uniqueResult();
+    }
+
+    private Producto consultarProducto(String nombre) {
+        String sql = "FROM Producto p WHERE p.nombre = :nombrep";
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrep", nombre);
+
+        return (Producto) q.uniqueResult();
     }
 
     public List<FacturaDTO> getListFac() {

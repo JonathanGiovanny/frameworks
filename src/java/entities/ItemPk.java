@@ -14,30 +14,30 @@ import java.util.Objects;
  */
 public class ItemPk implements Serializable {
 
-    private int id_producto;
-    private int id_factura;
+    private Factura id_factura;
+    private Producto id_producto;
 
-    public int getId_producto() {
-        return id_producto;
-    }
-
-    public void setId_producto(int id_producto) {
-        this.id_producto = id_producto;
-    }
-
-    public int getId_factura() {
+    public Factura getId_factura() {
         return id_factura;
     }
 
-    public void setId_factura(int id_factura) {
+    public void setId_factura(Factura id_factura) {
         this.id_factura = id_factura;
+    }
+
+    public Producto getId_producto() {
+        return id_producto;
+    }
+
+    public void setId_producto(Producto id_producto) {
+        this.id_producto = id_producto;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + this.id_producto;
-        hash = 89 * hash + this.id_factura;
+        hash = 67 * hash + Objects.hashCode(this.id_factura);
+        hash = 67 * hash + Objects.hashCode(this.id_producto);
         return hash;
     }
 
@@ -53,14 +53,13 @@ public class ItemPk implements Serializable {
             return false;
         }
         final ItemPk other = (ItemPk) obj;
-        if (this.id_producto != other.id_producto) {
+        if (!Objects.equals(this.id_factura, other.id_factura)) {
             return false;
         }
-        if (this.id_factura != other.id_factura) {
+        if (!Objects.equals(this.id_producto, other.id_producto)) {
             return false;
         }
         return true;
     }
 
-   
 }

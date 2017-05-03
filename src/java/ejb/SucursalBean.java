@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb;
 
 import Conexion.HibernateUtil;
@@ -15,20 +10,18 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
 
 /**
  *
- * @author JulioCesar
+ * @author ASUS1
  */
 @ManagedBean(name = "SucursalBean")
 @SessionScoped
 public class SucursalBean {
-    
-     private List<SucursalDTO> listSuc;
-    private Session session;
+
+    private List<SucursalDTO> listSuc;
 
     public void loadSucursales() {
         listSuc = new ArrayList<>();
@@ -38,8 +31,7 @@ public class SucursalBean {
             List<List<String>> sucursales = leerCsv.getData("D:/Sucursales.csv");
             sucursales = validarColumnas(sucursales);
 
-            for (int i = 1; i < sucursales.size(); i++) {
-                List<String> fila = sucursales.get(i);
+            for (List<String> fila : sucursales) {
                 SucursalDTO sucDTO = new SucursalDTO(fila.get(0), fila.get(1), fila.get(2));
                 listSuc.add(sucDTO);
             }
@@ -60,34 +52,49 @@ public class SucursalBean {
 
     public void guardar(ActionEvent actionEvent) {
         HibernateUtil.start();
-        session = HibernateUtil.getSession();
 
-        for (SucursalDTO fila : listSuc) {
-            Sucursal s = consultar(fila.getNombre_sucursal());
-            if (s == null) {
-                s = new Sucursal();
-                s.setNombre_sucursal(fila.getNombre_sucursal());
-                s.setId_lugar(consultarLugar(fila.getId_lugar()));
-                s.setDireccion(fila.getDireccion());
-                session.flush();
-                session.save(s);
+        try {
+            for (SucursalDTO fila : listSuc) {
+                Sucursal s = consultar(fila.getNombre_sucursal());
+                if (s == null) {
+                    s = new Sucursal();
+                    s.setNombre_sucursal(fila.getNombre_sucursal());
+                    s.setId_lugar(consultarLugar(fila.getId_lugar()));
+                    s.setDireccion(fila.getDireccion());
+                    HibernateUtil.getSession().save(s);
+                }
             }
+
+            HibernateUtil.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.close();
         }
-        HibernateUtil.commit();
     }
 
     private Sucursal consultar(String nombre) {
         String sql = "FROM Sucursal s WHERE s.nombre_sucursal = :nombrec";
-        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre);
 
         return (Sucursal) q.uniqueResult();
     }
-    
+
     private Lugar consultarLugar(String nombre) {
         String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec";
-        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre);
+        Lugar l;
 
-        return (Lugar) q.uniqueResult();
+        try {
+            l = (Lugar) q.uniqueResult();
+
+        } catch (Exception e) {
+            List<Lugar> lista = q.list();
+            l = lista.get(0);
+        }
+
+        return l;
     }
 
     public List<SucursalDTO> getListSuc() {
@@ -97,7 +104,5 @@ public class SucursalBean {
     public void setListSuc(List<SucursalDTO> listSuc) {
         this.listSuc = listSuc;
     }
-    
-    
-    
+
 }

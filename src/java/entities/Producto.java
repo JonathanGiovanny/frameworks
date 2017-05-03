@@ -6,7 +6,7 @@
 package entities;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -23,19 +23,16 @@ public class Producto {
     private Integer cantidad_minima;
     private String marca;
 
-    
-    private List<Item> listaItems;
+    private Set<Item> listaItems;
 
-    public List<Item> getListaItems() {
+    public Set<Item> getListaItems() {
         return listaItems;
     }
 
-    public void setListaItems(List<Item> listaItems) {
+    public void setListaItems(Set<Item> listaItems) {
         this.listaItems = listaItems;
     }
-    
-    
-    
+
     public Integer getId_producto() {
         return id_producto;
     }
@@ -51,8 +48,6 @@ public class Producto {
     public void setId_categoria(Categoria id_categoria) {
         this.id_categoria = id_categoria;
     }
-
-    
 
     public String getNombre() {
         return nombre;

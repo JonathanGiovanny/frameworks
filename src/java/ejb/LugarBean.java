@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb;
-
-
 
 import Conexion.HibernateUtil;
 import dtos.LugarDTO;
@@ -17,21 +10,19 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
 
 /**
  *
- * @author JulioCesar
+ * @author ASUS1
  */
 @ManagedBean(name = "LugarBean")
 @SessionScoped
 public class LugarBean {
+
     private List<LugarDTO> listLug;
-    private Session session;
-    
-    
+
     public void loadLugares() {
         listLug = new ArrayList<>();
         LeerCSV leerCsv = LeerCSV.getInstance();
@@ -40,8 +31,7 @@ public class LugarBean {
             List<List<String>> lugares = leerCsv.getData("D:/Lugares.csv");
             lugares = validarColumnas(lugares);
 
-            for (int i = 1; i < lugares.size(); i++) {
-                List<String> fila = lugares.get(i);
+            for (List<String> fila : lugares) {
                 LugarDTO lugDTO = new LugarDTO(fila.get(1), fila.get(0), fila.get(2));
                 listLug.add(lugDTO);
             }
@@ -51,64 +41,100 @@ public class LugarBean {
             System.out.println(e.getMessage());
         }
     }
-    
-    
-    
+
     public List<List<String>> validarColumnas(List<List<String>> lugares) {
         List<List<String>> resultado = Validaciones.eliminarColumna(lugares, 3);
         return resultado;
     }
-    
-    
+
     public void guardar(ActionEvent actionEvent) {
         HibernateUtil.start();
-        session = HibernateUtil.getSession();
 
-        for (LugarDTO fila : listLug) {
-            Lugar l = consultar(fila.getNombre_lugar(), fila.getTipo_lugar());
-            if (l == null) {
-                l = new Lugar();
-                l.setNombre_lugar(fila.getNombre_lugar());
-                if(fila.getTipo_lugar().equalsIgnoreCase("CIUDAD")){
-                     l.setTipo_lugar(TipoLugar.C);
-                     validarLugar(fila.getId_ubicacion(), TipoLugar.D);
-                }else if(fila.getTipo_lugar().equalsIgnoreCase("DEPARTAMENTO")) {
-                     l.setTipo_lugar(TipoLugar.D);
-                     validarLugar(fila.getId_ubicacion(), TipoLugar.P);
-                }else{
-                     l.setTipo_lugar(TipoLugar.P);
+        try {
+            for (LugarDTO fila : listLug) {
+                boolean aux = consultar(fila.getNombre_lugar(), fila.getId_ubicacion());
+
+                if (!aux) {
+                    TipoLugar tipoPadre = fila.getTipo_lugar().equalsIgnoreCase("CIUDAD") ? TipoLugar.D
+                            : fila.getTipo_lugar().equalsIgnoreCase("DEPARTAMENTO") ? TipoLugar.P : null;
+                    Lugar l = new Lugar();
+                    l.setNombre_lugar(fila.getNombre_lugar());
+                    if (fila.getTipo_lugar().equalsIgnoreCase("CIUDAD")) {
+                        l.setTipo_lugar(TipoLugar.C);
+                        validarLugar(fila.getId_ubicacion(), TipoLugar.D);
+                    } else if (fila.getTipo_lugar().equalsIgnoreCase("DEPARTAMENTO")) {
+                        l.setTipo_lugar(TipoLugar.D);
+                        validarLugar(fila.getId_ubicacion(), TipoLugar.P);
+                    } else {
+                        l.setTipo_lugar(TipoLugar.P);
+                    }
+
+                    if (fila.getId_ubicacion() != null) {
+                        l.setId_ubicacion(extraerPadre(fila.getId_ubicacion(), tipoPadre));
+                    }
+
+                    HibernateUtil.getSession().save(l);
                 }
-                
-                if (fila.getId_ubicacion() != null) {
-                    l.setId_ubicacion(consultar(fila.getId_ubicacion(), fila.getTipo_lugar()));
-                }
-                session.flush();
-                session.save(l);
             }
-        }
 
-        HibernateUtil.commit();
+            HibernateUtil.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.close();
+        }
     }
-    
-    public void validarLugar(String l, TipoLugar tipo){
-        if(consultar(l, tipo.toString())== null){
+
+    public void validarLugar(String l, TipoLugar tipo) {
+        if (!consultarPadre(l)) {
             Lugar lug = new Lugar();
             lug.setNombre_lugar(l);
             lug.setTipo_lugar(tipo);
-            session.save(lug);
+            HibernateUtil.getSession().save(lug);
         }
     }
-            
 
-    private Lugar consultar(String nombre, String tipo) {
-        String sql = "SELECT distinct l FROM Lugar l WHERE l.nombre_lugar = :nombrec ";
-        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
-        List<Lugar> l= q.list();
+    private boolean consultar(String nombre, String ubicacion) {
+        String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec ";
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre);
+        List<Lugar> l = q.list();
+        boolean estado = false;
         for (int i = 0; i < l.size(); i++) {
-            System.out.println(l.get(i).getNombre_lugar());
+            if (l.get(i).getId_ubicacion() != null) {
+                if (l.get(i).getId_ubicacion().getNombre_lugar().equalsIgnoreCase(ubicacion)) {
+                    estado = true;
+                }
+            }
         }
-        System.out.println(q.toString());
-        return (Lugar) q.uniqueResult();
+
+        return estado;
+    }
+
+    public boolean consultarPadre(String nombre) {
+        String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec ";
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre);
+        List<Lugar> l = q.list();
+        boolean estado = false;
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i).getNombre_lugar().equalsIgnoreCase(nombre)) {
+                estado = true;
+            }
+        }
+        return estado;
+    }
+
+    public Lugar extraerPadre(String nombre, TipoLugar tipo) {
+        String sql = "FROM Lugar l WHERE l.nombre_lugar = :nombrec AND l.tipo_lugar = :tipo ";
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre).setParameter("tipo", tipo);
+        Lugar l;
+        try {
+            l = (Lugar) q.uniqueResult();
+        } catch (Exception e) {
+            List<Lugar> lista = q.list();
+            l = lista.get(0);
+        }
+        return l;
     }
 
     public List<LugarDTO> getListLug() {
@@ -118,6 +144,5 @@ public class LugarBean {
     public void setListLug(List<LugarDTO> listLug) {
         this.listLug = listLug;
     }
-    
-    
+
 }

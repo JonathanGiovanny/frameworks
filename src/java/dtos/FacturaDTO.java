@@ -20,12 +20,16 @@ public class FacturaDTO {
     private String idCajero;
     private String idCliente;
     private String nombreProveedor;
+    private String nombreProducto;
+    private Date fechaVencimiento;
+    private double valorUnitario;
+    private int cantidad;
 
     public FacturaDTO() {
         //Constructor vacio
     }
 
-    public FacturaDTO(int idFactura, Date fechaFactura, String tipoFactura, String nombreSucursal, String idCajero, String idCliente, String nombreProveedor) {
+    public FacturaDTO(int idFactura, Date fechaFactura, String tipoFactura, String nombreSucursal, String idCajero, String idCliente, String nombreProveedor, String nombreProducto, Date fechaVencimiento, double valorUnitario, int cantidad) {
         this.idFactura = idFactura;
         this.fechaFactura = fechaFactura;
         this.tipoFactura = tipoFactura;
@@ -33,6 +37,10 @@ public class FacturaDTO {
         this.idCajero = idCajero;
         this.idCliente = idCliente;
         this.nombreProveedor = nombreProveedor;
+        this.nombreProducto = nombreProducto;
+        this.fechaVencimiento = fechaVencimiento;
+        this.valorUnitario = valorUnitario;
+        this.cantidad = cantidad;
     }
 
     public int getIdFactura() {
@@ -90,4 +98,37 @@ public class FacturaDTO {
     public void setNombreProveedor(String nombreProveedor) {
         this.nombreProveedor = nombreProveedor;
     }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
+    public Date getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(Date fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
+
+    public double getValorUnitario() {
+        return valorUnitario;
+    }
+
+    public void setValorUnitario(double valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
 }
