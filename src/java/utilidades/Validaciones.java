@@ -1,16 +1,11 @@
 package utilidades;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * <table>
- * <tr>
- * <td>Julio</td>
- * <td>Jonathan</td>
- * </tr>
- * </table>
  *
  * @author RA302
  */
@@ -42,8 +37,11 @@ public class Validaciones {
         palabraTildes = palabraTildes.replace("Ã¶", "ö");
         palabraTildes = palabraTildes.replace("Ã¼", "ü");
         palabraTildes = palabraTildes.replace("ÃŸ", "ß");
-        palabraTildes = palabraTildes.replace("Ãª", "ê");
         palabraTildes = palabraTildes.replace("Ã¢", "â");
+        palabraTildes = palabraTildes.replace("Ãª", "ê");
+        palabraTildes = palabraTildes.replace("Ã®", "î");
+        palabraTildes = palabraTildes.replace("Ã´", "ô");
+        palabraTildes = palabraTildes.replace("Ã»", "û");
         return palabraTildes;
     }
 
@@ -52,56 +50,59 @@ public class Validaciones {
             fecha = fecha.concat("-01");
         }
 
-        SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yy");
+        SimpleDateFormat formato = null;
         Date resultado = null;
-        System.out.println("Bandera 1: " + resultado);
-        try {
-            resultado = formato.parse(fecha);
-        } catch (Exception e) {
-            System.out.println("Formato no valido");
-        }
-        System.out.println("Bandera 2: " + resultado);
 
-        if (resultado == null) {
+        if (fecha.length() == 8) {
             try {
-                formato = new SimpleDateFormat("dd/mm/yyyy");
+                formato = new SimpleDateFormat("dd/MM/yy");
                 resultado = formato.parse(fecha);
             } catch (Exception e) {
                 System.out.println("Formato no valido");
             }
-        }
-        System.out.println("Bandera 3: " + resultado);
 
-        if (resultado == null) {
-            try {
-                formato = new SimpleDateFormat("dd-mm-yyyy");
-                resultado = formato.parse(fecha);
-            } catch (Exception e) {
-                System.out.println("Formato no valido");
+            if (resultado == null) {
+                try {
+                    formato = new SimpleDateFormat("dd-MM-yy");
+                    resultado = formato.parse(fecha);
+                } catch (Exception e) {
+                    System.out.println("Formato no valido");
+                }
+            }
+
+        } else {
+            String[] componentesFecha = fecha.split(fecha.contains("/") ? "/" : "-");
+            if (componentesFecha[2].length() == 4) {
+                if (resultado == null) {
+                    try {
+                        formato = new SimpleDateFormat("dd/MM/yyyy");
+                        resultado = formato.parse(fecha);
+                    } catch (Exception e) {
+                        System.out.println("Formato no valido");
+                    }
+                }
+
+                if (resultado == null) {
+                    try {
+                        formato = new SimpleDateFormat("dd-MM-yyyy");
+                        resultado = formato.parse(fecha);
+                    } catch (Exception e) {
+                        System.out.println("Formato no valido");
+                    }
+                }
+
+            } else {
+                if (resultado == null) {
+                    try {
+                        formato = new SimpleDateFormat("yyyy-MM-dd");
+                        resultado = formato.parse(fecha);
+                    } catch (Exception e) {
+                        System.out.println("Formato no valido");
+                    }
+                }
             }
         }
-        System.out.println("Bandera 4: " + resultado);
 
-        if (resultado == null) {
-            try {
-                formato = new SimpleDateFormat("dd-mm-yy");
-                resultado = formato.parse(fecha);
-            } catch (Exception e) {
-                System.out.println("Formato no valido");
-            }
-        }
-        System.out.println("Bandera 5: " + resultado);
-
-        if (resultado == null) {
-            try {
-                formato = new SimpleDateFormat("yyyy-mm-dd");
-                resultado = formato.parse(fecha);
-            } catch (Exception e) {
-                System.out.println("Formato no valido");
-            }
-        }
-        System.out.println("Bandera 6: " + resultado);
-        
         return resultado;
     }
 }

@@ -49,6 +49,9 @@ public class LeerCSV {
                 resultado.add(fila);
             }
 
+            //Se elimina la fila que corresponde a los nombres de la columna en cada archivo
+            resultado.remove(0);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

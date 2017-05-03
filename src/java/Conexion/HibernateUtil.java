@@ -17,14 +17,10 @@ public class HibernateUtil {
     private static Session session = null;
 
     public static void start() {
-        if (session == null) {
+        if (session == null || !session.isOpen()) {
             session = new Configuration().configure().buildSessionFactory().openSession();
-            session.beginTransaction();
-        } else {
-            if (!session.isOpen()) {
-                session.beginTransaction();
-            }
         }
+        session.beginTransaction();
     }
 
     public static void close() {
