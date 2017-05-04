@@ -6,7 +6,10 @@
 package utilidades;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,7 @@ public class LeerCSV {
 
     public static final String SEPARATOR = ";";
     public static final String QUOTE = "\"";
+    public static BufferedReader br = null;
 
     private static LeerCSV instance;
 
@@ -29,12 +33,10 @@ public class LeerCSV {
         return instance;
     }
 
-    public List<List<String>> getData(String path) throws Exception {
-        BufferedReader br = null;
+    public List<List<String>> getData() throws Exception {
         List<List<String>> resultado = new ArrayList<>();
 
         try {
-            br = new BufferedReader(new FileReader(path));
             String line = br.readLine();
 
             while (null != line) {
@@ -61,5 +63,9 @@ public class LeerCSV {
         }
 
         return resultado;
+    }
+    
+    public static void setBr(InputStream is){
+        br = new BufferedReader(new InputStreamReader(is));
     }
 }

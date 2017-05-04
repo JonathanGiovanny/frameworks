@@ -28,7 +28,7 @@ public class LugarBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> lugares = leerCsv.getData("D:/Lugares.csv");
+            List<List<String>> lugares = leerCsv.getData();
             lugares = validarColumnas(lugares);
 
             for (List<String> fila : lugares) {

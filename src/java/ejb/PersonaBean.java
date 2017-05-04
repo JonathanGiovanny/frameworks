@@ -29,7 +29,7 @@ public class PersonaBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> personas = leerCsv.getData("D:/Personas.csv");
+            List<List<String>> personas = leerCsv.getData();
             personas = validarColumnas(personas);
 
             for (List<String> fila : personas) {

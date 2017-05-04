@@ -40,7 +40,7 @@ public class FacturaBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> facturas = leerCsv.getData("D:/Facturas.csv");
+            List<List<String>> facturas = leerCsv.getData();
             validarColumnas(facturas);
 
         } catch (Exception e) {

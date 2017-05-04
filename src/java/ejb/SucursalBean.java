@@ -28,7 +28,7 @@ public class SucursalBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> sucursales = leerCsv.getData("D:/Sucursales.csv");
+            List<List<String>> sucursales = leerCsv.getData();
             sucursales = validarColumnas(sucursales);
 
             for (List<String> fila : sucursales) {

@@ -32,7 +32,7 @@ public class CategoriaBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> categorias = leerCsv.getData("D:/Categorias.csv");
+            List<List<String>> categorias = leerCsv.getData();
             categorias = validarColumnas(categorias);
 
             for (List<String> fila : categorias) {

@@ -34,7 +34,7 @@ public class ProductoBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> productos = leerCsv.getData("D:/Productos.csv");
+            List<List<String>> productos = leerCsv.getData();
 
             for (List<String> fila : productos) {
                 ProductoDTO prodDTO = new ProductoDTO(fila.get(0), fila.get(1), fila.get(2), new Date(17, 12, 12), Integer.parseInt(fila.get(3)), Integer.parseInt(fila.get(5)), fila.get(4));

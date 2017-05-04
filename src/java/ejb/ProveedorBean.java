@@ -34,7 +34,7 @@ public class ProveedorBean {
         LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
-            List<List<String>> proveedores = leerCsv.getData("D:/Proveedores.csv");
+            List<List<String>> proveedores = leerCsv.getData();
             proveedores = validarColumnas(proveedores);
 
             for (List<String> fila : proveedores) {
