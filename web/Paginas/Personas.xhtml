@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title> SLC - Personas </title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/Recursos/CSS/centro.css" />
+    </h:head>
+
+    <header>
+        <ui:include src="/WEB-INF/Plantillas/header.xhtml" />
+    </header>
+
+    <h:body>
+        #{PersonaBean.init()}
+        <div id="panelCentro" class="panelCentro">
+            <div id="panelTitulo" class="panelTitulo" style="background-color: #3498db">
+                PERSONAS A INGRESAR
+            </div>
+
+            <div id="panelTabla" class="panelTabla">
+                #{PersonaBean.loadPersonas()}
+                <h:form>
+                    <p:dataTable var="per" style="width:100%; height: 100%" value="#{PersonaBean.listPer}" scrollable="true" scrollWidth="100%" scrollHeight="100%" editable="true">
+
+                        <p:column headerText="Cedula">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.cedula}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="cedula" value="#{per.cedula}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.nombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="nombre" value="#{per.nombre}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Apellido">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.apellido}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="apellido" value="#{per.apellido}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                         <p:column headerText="Sexo">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.sexo}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="sexo" value="#{per.sexo}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Correo Electronico">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.correo}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="correo" value="#{per.correo}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Telefono">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.telefono}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="telefono" value="#{per.telefono}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Direccion">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.direccion}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="direccion" value="#{per.direccion}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Tipo Persona">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.tipo_persona}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="tipoper" value="#{per.tipo_persona}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                         <p:column headerText="Fecha Nacimiento">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.fecha_nacimiento}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="fecha" value="#{per.fecha_nacimiento}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Usuario">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{per.usuario}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="usuario" value="#{per.usuario}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <div id="panelBoton" class="panelBoton" align="center">
+                        <p:commandButton value="Guardar" actionListener="#{PersonaBean.guardar(actionEvent)}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>

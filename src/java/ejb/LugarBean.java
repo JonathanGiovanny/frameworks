@@ -7,8 +7,10 @@ import entities.TipoLugar;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
@@ -22,10 +24,23 @@ import utilidades.Validaciones;
 public class LugarBean {
 
     private List<LugarDTO> listLug;
+        private LeerCSV leerCsv;
+
+    @PostConstruct
+    public void init() {
+        leerCsv = LeerCSV.getInstance();
+        if (!leerCsv.isFileLoad()) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Lugares.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void loadLugares() {
         listLug = new ArrayList<>();
-        LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
             List<List<String>> lugares = leerCsv.getData();

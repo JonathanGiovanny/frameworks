@@ -11,8 +11,10 @@ import entities.Categoria;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
@@ -26,10 +28,23 @@ import utilidades.Validaciones;
 public class CategoriaBean {
 
     private List<CategoriaDTO> listCat;
+    private LeerCSV leerCsv;
+
+    @PostConstruct
+    public void init() {
+        leerCsv = LeerCSV.getInstance();
+        if (!leerCsv.isFileLoad()) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Categorias.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void loadCategorias() {
         listCat = new ArrayList<>();
-        LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
             List<List<String>> categorias = leerCsv.getData();
@@ -65,7 +80,7 @@ public class CategoriaBean {
                     if (fila.getCatPadre() != null) {
                         c.setId_categoriapadre(consultar(fila.getCatPadre()));
                     }
-                    
+
                     HibernateUtil.getSession().save(c);
                 }
             }

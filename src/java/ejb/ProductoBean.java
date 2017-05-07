@@ -13,8 +13,10 @@ import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
@@ -28,10 +30,23 @@ import utilidades.Validaciones;
 public class ProductoBean {
 
     private List<ProductoDTO> listProd;
+    private LeerCSV leerCsv;
+
+    @PostConstruct
+    public void init() {
+        leerCsv = LeerCSV.getInstance();
+        if (!leerCsv.isFileLoad()) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Productos.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void loadProductos() {
         listProd = new ArrayList<>();
-        LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
             List<List<String>> productos = leerCsv.getData();

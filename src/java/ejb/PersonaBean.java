@@ -8,8 +8,10 @@ import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
@@ -23,10 +25,23 @@ import utilidades.Validaciones;
 public class PersonaBean {
 
     private List<PersonaDTO> listPer;
+    private LeerCSV leerCsv;
+
+    @PostConstruct
+    public void init() {
+        leerCsv = LeerCSV.getInstance();
+        if (!leerCsv.isFileLoad()) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Personas.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void loadPersonas() {
         listPer = new ArrayList<>();
-        LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
             List<List<String>> personas = leerCsv.getData();
@@ -80,30 +95,30 @@ public class PersonaBean {
     public void guardar(ActionEvent actionEvent) {
         HibernateUtil.start();
 
-        try{
-        for (PersonaDTO fila : listPer) {
-            Persona p = consultar(fila.getCedula());
-            if (p == null) {
-                p = new Persona();
-                p.setCedula(Integer.parseInt(fila.getCedula()));
-                p.setNombre(fila.getNombre());
-                p.setApellido(fila.getApellido());
-                p.setFecha_nacimiento(fila.getFecha_nacimiento());
-                p.setTelefono(fila.getTelefono());
-                p.setDireccion(fila.getDireccion());
-                p.setCorreo(fila.getCorreo());
-                p.setSexo(fila.getSexo());
-                p.setTipo_persona(fila.getTipo_persona());
-                p.setUsuario(fila.getUsuario());
-                p.setContrasenia(fila.getContrasenia());
-                
-                HibernateUtil.getSession().save(p);
-            }
-        }
+        try {
+            for (PersonaDTO fila : listPer) {
+                Persona p = consultar(fila.getCedula());
+                if (p == null) {
+                    p = new Persona();
+                    p.setCedula(Integer.parseInt(fila.getCedula()));
+                    p.setNombre(fila.getNombre());
+                    p.setApellido(fila.getApellido());
+                    p.setFecha_nacimiento(fila.getFecha_nacimiento());
+                    p.setTelefono(fila.getTelefono());
+                    p.setDireccion(fila.getDireccion());
+                    p.setCorreo(fila.getCorreo());
+                    p.setSexo(fila.getSexo());
+                    p.setTipo_persona(fila.getTipo_persona());
+                    p.setUsuario(fila.getUsuario());
+                    p.setContrasenia(fila.getContrasenia());
 
-        HibernateUtil.commit();
-        
-        } catch(Exception e) {
+                    HibernateUtil.getSession().save(p);
+                }
+            }
+
+            HibernateUtil.commit();
+
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             HibernateUtil.close();

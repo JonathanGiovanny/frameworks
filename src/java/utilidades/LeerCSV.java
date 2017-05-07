@@ -6,8 +6,6 @@
 package utilidades;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -57,8 +55,9 @@ public class LeerCSV {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (null != br) {
+            if (br != null) {
                 br.close();
+                br = null;
             }
         }
 
@@ -67,5 +66,9 @@ public class LeerCSV {
     
     public static void setBr(InputStream is){
         br = new BufferedReader(new InputStreamReader(is));
+    }
+    
+    public static boolean isFileLoad(){
+        return br != null;
     }
 }

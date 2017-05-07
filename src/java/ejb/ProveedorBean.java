@@ -11,10 +11,11 @@ import entities.Proveedor;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import utilidades.LeerCSV;
 import utilidades.Validaciones;
 
@@ -27,11 +28,23 @@ import utilidades.Validaciones;
 public class ProveedorBean {
 
     private List<ProveedorDTO> listProv;
-    private Session session;
+    private LeerCSV leerCsv;
+
+    @PostConstruct
+    public void init() {
+        leerCsv = LeerCSV.getInstance();
+        if (!leerCsv.isFileLoad()) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Proveedores.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void loadProveedores() {
         listProv = new ArrayList<>();
-        LeerCSV leerCsv = LeerCSV.getInstance();
 
         try {
             List<List<String>> proveedores = leerCsv.getData();
@@ -56,28 +69,32 @@ public class ProveedorBean {
 
     public void guardar(ActionEvent actionEvent) {
         HibernateUtil.start();
-        session = HibernateUtil.getSession();
 
-        for (ProveedorDTO fila : listProv) {
-            Proveedor proveedor = consultar(fila.getNit());
-            if (proveedor == null) {
-                proveedor = new Proveedor();
-                proveedor.setNit(fila.getNit());
-                proveedor.setNombre(fila.getNombre());
-                proveedor.setDireccion(fila.getDireccion());
-                proveedor.setTelefono(fila.getTelefono());
-                proveedor.setDescripcion(fila.getDescripcion());
-                session.flush();
-                session.save(proveedor);
+        try {
+            for (ProveedorDTO fila : listProv) {
+                Proveedor proveedor = consultar(fila.getNit());
+                if (proveedor == null) {
+                    proveedor = new Proveedor();
+                    proveedor.setNit(fila.getNit());
+                    proveedor.setNombre(fila.getNombre());
+                    proveedor.setDireccion(fila.getDireccion());
+                    proveedor.setTelefono(fila.getTelefono());
+                    proveedor.setDescripcion(fila.getDescripcion());
+                    HibernateUtil.getSession().save(proveedor);
+                }
             }
-        }
 
-        HibernateUtil.commit();
+            HibernateUtil.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.close();
+        }
     }
 
     private Proveedor consultar(String nombre) {
         String sql = "FROM Proveedor p WHERE p.nit = :nombrec";
-        Query q = session.createQuery(sql).setParameter("nombrec", nombre);
+        Query q = HibernateUtil.getSession().createQuery(sql).setParameter("nombrec", nombre);
 
         return (Proveedor) q.uniqueResult();
     }

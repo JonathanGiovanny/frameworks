@@ -6,8 +6,6 @@
 package ejb.util;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -25,7 +23,6 @@ public class CargarArchivoBean {
 
     public void accionCargar(FileUploadEvent event) {
         UploadedFile archivo = event.getFile();
-        System.out.println("Archivo cargado: " + archivo.getFileName());
         LeerCSV l = LeerCSV.getInstance();
 
         try {

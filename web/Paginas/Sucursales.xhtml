@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title> SLC - Sucursales </title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/Recursos/CSS/centro.css" />
+    </h:head>
+
+    <header>
+        <ui:include src="/WEB-INF/Plantillas/header.xhtml" />
+    </header>
+
+    <h:body>
+        #{SucursalBean.init()}
+        <div id="panelCentro" class="panelCentro">
+            <div id="panelTitulo" class="panelTitulo" style="background-color: #27ae60">
+                SUCURSALES A INGRESAR
+            </div>
+
+            <div id="panelTabla" class="panelTabla">
+                #{SucursalBean.loadSucursales()}
+                <h:form>
+                    <p:dataTable var="suc" style="width:100%; height: 100%" value="#{SucursalBean.listSuc}" scrollable="true" scrollWidth="100%" scrollHeight="100%" editable="true">
+
+                        <p:column headerText="Lugar" style="width: 20%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{suc.id_lugar}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="lug" value="#{suc.id_lugar}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{suc.nombre_sucursal}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="nombre" value="#{suc.nombre_sucursal}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Direccion">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{suc.direccion}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="direccion" value="#{suc.direccion}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <div id="panelBoton" class="panelBoton" align="center">
+                        <p:commandButton value="Guardar" actionListener="#{SucursalBean.guardar(actionEvent)}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>

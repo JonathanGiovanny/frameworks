@@ -17,10 +17,6 @@
         <property column="stock" name="stock" type="java.lang.Integer" />
         <property column="cantidad_minima" name="cantidad_minima" type="java.lang.Integer" />
         <property column="marca" name="marca" type="string" />
-        
-        <many-to-one name="id_categoria">
-            <column name="id_categoria"  />
-        </many-to-one>
 
         <many-to-one name="id_categoria">
             <column name="id_categoria"  />

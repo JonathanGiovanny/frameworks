@@ -1,0 +1,49 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    font-family: arial;
+    width:100%;
+    height: 100%;
+
+    font-family: verdana;
+    background-color: #ECF0F1;
+    background: url("../Imagenes/Fondo.PNG") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.panelCentro{
+    position: relative;
+    margin: auto;
+    min-height: 300px;
+    height: 90%;
+    width: 90%;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+    background-color: #ffffff;
+}
+
+.panelTitulo{
+    text-align: center;
+    text-transform: capitalize;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+    max-height: 50px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.panelTabla{
+    height: 80%;
+    min-height: 100px;
+}
+
+.ui-datatable-scrollable-body {
+    max-height: 57vh !important;
+}
+
+.panelBoton {
+    padding: 2%;
+}

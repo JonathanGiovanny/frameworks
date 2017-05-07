@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title> SLC - Facturas </title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/Recursos/CSS/centro.css" />
+    </h:head>
+
+    <header>
+        <ui:include src="/WEB-INF/Plantillas/header.xhtml" />
+    </header>
+
+    <h:body>
+        #{FacturaBean.init()}
+        <div id="panelCentro" class="panelCentro">
+            <div id="panelTitulo" class="panelTitulo" style="background-color: #8e44ad;">
+                FACTURAS A INGRESAR
+            </div>
+
+            <div id="panelTabla" class="panelTabla">
+                #{FacturaBean.loadFacturas()}
+                <h:form>
+                    <p:dataTable var="fac" value="#{FacturaBean.listFac}" scrollable="true" scrollWidth="100%" scrollHeight="100%" editable="true">
+                        <p:column headerText="# Factura" style="width: 9ch">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.idFactura}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="idFac" value="#{fac.idFactura}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Nombre proveedor" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.nombreProveedor}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="nomProv" value="#{fac.nombreProveedor}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Fecha" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.fechaFactura}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="fecha" value="#{fac.fechaFactura}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Tipo" style="width: 4ch">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.tipoFactura}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="tipo" value="#{fac.tipoFactura}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Cajero" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.idCajero}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="cajero" value="#{fac.idCajero}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Sucursal" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.nombreSucursal}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="sucursal" value="#{fac.nombreSucursal}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Producto" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.nombreProducto}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="producto" value="#{fac.nombreProducto}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Fecha vencimiento" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.fechaVencimiento}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="fecVencimiento" value="#{fac.fechaVencimiento}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Valor Unitario" style="width: 16%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.valorUnitario}" /></f:facet>
+                                <f:facet name="input"><p:inputNumber id="valorUnit" value="#{fac.valorUnitario}" style="width:100%" symbol="$"
+                               decimalSeparator="," thousandSeparator="."/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column headerText="Cantidad" style="width: 8ch">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{fac.cantidad}" /></f:facet>
+                                <f:facet name="input"><p:inputNumber id="cantidad" value="#{fac.cantidad}" style="width:100%" decimalPlaces="0" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column style="width:4%">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+
+                    <div id="panelBoton" class="panelBoton" align="center">
+                        <p:commandButton value="Guardar" actionListener="#{FacturaBean.guardar(actionEvent)}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>
