@@ -7,6 +7,7 @@ package entities;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -27,8 +28,8 @@ public class Persona {
     private String usuario;
     private String contrasenia;
     
-    private List<Factura> listaFacturasCompra;
-    private List<Factura> listaFacturasVenta;
+    private Set<Factura> listaFacturasCompra;
+    private Set<Factura> listaFacturasVenta;
 
     public int getId_persona() {
         return id_persona;
@@ -130,22 +131,23 @@ public class Persona {
         this.contrasenia = contrasenia;
     }
 
-    public List<Factura> getListaFacturasCompra() {
+    public Set<Factura> getListaFacturasCompra() {
         return listaFacturasCompra;
     }
 
-    public void setListaFacturasCompra(List<Factura> listaFacturasCompra) {
+    public void setListaFacturasCompra(Set<Factura> listaFacturasCompra) {
         this.listaFacturasCompra = listaFacturasCompra;
     }
 
-    public List<Factura> getListaFacturasVenta() {
+    public Set<Factura> getListaFacturasVenta() {
         return listaFacturasVenta;
     }
 
-    public void setListaFacturasVenta(List<Factura> listaFacturasVenta) {
+    public void setListaFacturasVenta(Set<Factura> listaFacturasVenta) {
         this.listaFacturasVenta = listaFacturasVenta;
     }
 
+   
     
     
 
