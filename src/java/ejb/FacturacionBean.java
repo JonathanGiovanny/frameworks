@@ -293,7 +293,7 @@ public class FacturacionBean {
             param2.put("Sucursal",lblSucursal);
             param2.put("Factura", (maxNumeroFactura+1));
             param2.put("Ruta", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/Recursos/Imagenes/Logo.PNG"));
-            System.out.println(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/Recursos/Imagenes/Logo.PNG"));
+            
             
             String path=FacesContext.getCurrentInstance().getExternalContext().getRealPath(jasper);
             File file = new File(path);
