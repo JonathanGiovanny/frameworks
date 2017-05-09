@@ -16,6 +16,7 @@
     </header>
 
     <h:body>
+         #{FacturacionBean.init()}
         <div id="panelCentro" class="panelCentro">
             <div id="panelTitulo" class="panelTitulo" style="background-color: #E74C3C;">
                 GENERACION DE FACTURAS
@@ -53,7 +54,7 @@
                             <f:selectItems value="#{FacturacionBean.cargarClientes()}" />
                             <p:ajax update="lblCliente"  listener="#{FacturacionBean.cambiarCliente()}" />
                         </p:selectOneMenu>
-                        <p:commandButton  icon="ui-icon-search" value="Crear" actionListener="#{FacturacionBean.agregarItem(actionEvent)}" onclick="PF('dlg2').show();" />
+                        <p:commandButton  value="Crear" onclick="location.href = 'CrearCliente.xhtml';"/>
 
                         <p:outputLabel id="lblCliente" value="#{FacturacionBean.lblCliente}" />
                         <p:outputLabel id="lbl1" value=" " />
@@ -66,7 +67,7 @@
                             <f:selectItems value="#{FacturacionBean.cargarProductos()}" />
                         </p:selectOneMenu>
                         
-                        <p:commandButton  icon="ui-icon-search" update="tabla" value="Agregar" actionListener="#{FacturacionBean.agregarItem(actionEvent)}" />
+                        <p:commandButton  update="tabla" value="Agregar" actionListener="#{FacturacionBean.agregarItem(actionEvent)}" />
                     
                          <h:outputLabel for="prod" value="Cantidad: " />
                             <h:panelGrid columns="1" style="margin-bottom: 10px">
@@ -107,44 +108,15 @@
 
                         <p:column style="width:32px">
                             <p:rowEditor />
-                        </p:column>
-                        
-                       
+                        </p:column>   
                     </p:dataTable>
 
                     <div id="panelBoton" class="panelBoton" align="center">
                         <p:commandButton ajax="false" value="Imprimir" actionListener="#{FacturacionBean.imprimirPDF()}"/>
+                        
                     </div>
-                    
-                    
-
-                </h:form>
-                
-                <p:dialog header="Crear Cliente" widgetVar="dlg2" modal="true" height="220" resizable="false">
-                    <h:form>
-                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" columnClasses="label, value">
-                            <h:outputLabel value="Cedula:" />
-                            <p:inputText value="#{FacturacionBean.cedulaCliente}"/>
-
-                            <h:outputLabel value="Apellido:" />
-                            <p:inputText value="#{FacturacionBean.apellidoCliente}"/>
-
-                            <h:outputLabel value="Nombre:" />
-                            <p:inputText value="#{FacturacionBean.nombreCliente}"/>
-
-                            <h:outputLabel value="Direccion:" />
-                            <p:inputText value="#{FacturacionBean.direccionCliente}"/>
-
-                            <p:commandButton  icon="ui-icon-search" update="@form" action="#{FacturacionBean.agregarCliente()}" value="Agregar Cliente" onclick="PF('dlg2').hide();" />
-                        </h:panelGrid>
-                        </h:form>
-                    </p:dialog>  
-                
+                </h:form>   
             </div>
-        </div>
-        
-        
-            
-        
+        </div>   
     </h:body>
 </html>

@@ -14,7 +14,7 @@ import entities.Persona;
 import entities.Producto;
 import entities.Sucursal;
 import entities.TipoFactura;
-import java.awt.event.ActionEvent;
+import javax.faces.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,10 +71,17 @@ public class FacturacionBean {
     private String apellidoCliente;
     private String direccionCliente;
     
-    public FacturacionBean() {
-        listItems = new ArrayList<>();
+    
+   
+    public void init() {
         HibernateUtil.start();
         session = HibernateUtil.getSession();
+    }
+      
+      
+      public FacturacionBean() {
+        listItems = new ArrayList<>();
+        
         
     }
     
@@ -231,7 +238,7 @@ public class FacturacionBean {
      
      public void guardar(){
         try {
-         consultarNumeroFactura();
+         
          Factura f= new Factura();
          f.setFecha_compra(new java.sql.Date(fecha.getTime()));
          f.setNumero_factura(maxNumeroFactura+1);
@@ -255,7 +262,8 @@ public class FacturacionBean {
             session.save(it);
          }
            HibernateUtil.commit();
-
+           HibernateUtil.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -277,21 +285,21 @@ public class FacturacionBean {
      
     
     public void imprimirPDF(){
-        
+        consultarNumeroFactura();
         pdf("/resources/factura.jasper", listItems, "FacturaDeVenta.pdf");
         guardar();
         
     }
     
     public void pdf(String jasper, List<?> data, String fileName){
-      
+        
         try {
             Map<String, Object> param2 = new HashMap<>();
             param2.put("Fecha", fecha);
             param2.put("Cajero", lblCajero);
             param2.put("Cliente", lblCliente);
             param2.put("Sucursal",lblSucursal);
-            param2.put("Factura", (maxNumeroFactura+1));
+            param2.put("Factura", maxNumeroFactura+1);
             param2.put("Ruta", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/Recursos/Imagenes/Logo.PNG"));
             
             
@@ -311,6 +319,10 @@ public class FacturacionBean {
         }
         
     } 
+    
+    public String navegar(){
+        return "CrearCliente.xhtml";
+    }
      
      
      
@@ -421,6 +433,8 @@ public class FacturacionBean {
     public void setDireccionCliente(String direccionCliente) {
         this.direccionCliente = direccionCliente;
     }
+
+    
 
     public int getCantidad() {
         return cantidad;
