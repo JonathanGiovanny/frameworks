@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title> SLC - Categorias </title>
+        #{session.setAttribute("Volver", "Categorias.xhtml")}
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/Recursos/CSS/centro.css" />
+    </h:head>
+
+    <header>
+        <ui:include src="/WEB-INF/Plantillas/header.xhtml" />
+    </header>
+
+    <h:body>
+        <div id="panelCentro" class="panelCentro">
+            <div id="panelTitulo" class="panelTitulo" style="background-color: #E74C3C;">
+                INGRESAR NUEVO CLIENTE
+            </div>
+
+            <div id="panelTabla" class="panelTabla"  align="center">
+                <h:form>
+                    <h:panelGrid columns="2" style="vertical-align:middle; margin-bottom:10px" cellpadding="5" columnClasses="label, value">
+                            <h:outputLabel value="Cedula:" />
+                            <p:inputText value="#{ClienteBean.cedulaCliente}"/>
+
+                            <h:outputLabel value="Apellido:" />
+                            <p:inputText value="#{ClienteBean.apellidoCliente}"/>
+
+                            <h:outputLabel value="Nombre:" />
+                            <p:inputText value="#{ClienteBean.nombreCliente}"/>
+
+                            <h:outputLabel value="Direccion:" />
+                            <p:inputText value="#{ClienteBean.direccionCliente}"/>
+                        </h:panelGrid>
+
+                    <div id="panelBoton" class="panelBoton" align="center">
+                        <p:commandButton value="Guardar" actionListener="#{ClienteBean.guardar(actionEvent)}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>
