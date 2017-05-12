@@ -33,7 +33,7 @@
     </session-config>
     
     <welcome-file-list>
-        <welcome-file>Supermercado/index.xhtml</welcome-file>
+        <welcome-file>Supermercado/login.xhtml</welcome-file>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     

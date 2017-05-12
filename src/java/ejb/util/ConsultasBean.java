@@ -2,6 +2,7 @@ package ejb.util;
 
 import Conexion.HibernateUtil;
 import com.mysql.jdbc.Connection;
+import java.awt.event.ActionEvent;
 import java.sql.ResultSetMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,14 +12,15 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author ASUS1
  */
-@ManagedBean(name = "Consultas")
+@ManagedBean(name = "ConsultasBean")
 @SessionScoped
-public class Consultas {
+public class ConsultasBean extends EJBBase {
 
     private String consulta;
     private List<List<String>> tabla;
@@ -26,14 +28,15 @@ public class Consultas {
 
     @PostConstruct
     public void init() {
-        tabla = new ArrayList<>();
-        nomColumnas = new ArrayList<>();
+        this.validarInicioSesion(FacesContext.getCurrentInstance().getExternalContext());
+        if (tabla == null || nomColumnas == null) {
+            tabla = new ArrayList<>();
+            nomColumnas = new ArrayList<>();
+        }
     }
 
-    public void consultar() {
+    public void consultar(ActionEvent actionEvent) {
         HibernateUtil.start();
-        String sql = "SELECT P.NOMBRE, C.NOMBRE_CATEGORIA FROM PRODUCTOS P, CATEGORIAS C"
-                + " WHERE P.ID_CATEGORIA = C.ID_CATEGORIA";
 
         Connection conn = null;
 
@@ -43,27 +46,24 @@ public class Consultas {
         try {
             conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/supermercado?user=root&password=root");
 
-            ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(this.consulta);
             rs = ps.executeQuery();
 
             ResultSetMetaData rsm = rs.getMetaData();
-            System.out.println("Columnas: " + rsm.getColumnCount());
 
             while (rs.next()) {
                 List<String> fila = new ArrayList<>();
 
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                    fila = new ArrayList<>();
                     fila.add(rs.getString(i));
-                    if (nomColumnas.size() <= rsm.getColumnCount()) {
+
+                    if (nomColumnas.size() < rsm.getColumnCount()) {
                         nomColumnas.add(rsm.getColumnName(i));
                     }
                 }
 
                 tabla.add(fila);
             }
-
-            invertirFilasColumnas();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,16 +83,21 @@ public class Consultas {
                 e.printStackTrace();
             }
         }
-    }
 
-    public void invertirFilasColumnas() {
-        List<List<String>> listaCols = new ArrayList<>();
-
-        for (int i = 0; i < tabla.size(); i++) {
-            listaCols.add(getColumna(tabla, i));
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("ResultadoConsulta.xhtml");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        this.tabla = listaCols;
+    }
+    
+    public void regresar(ActionEvent actionEvent) {
+        consulta = "";
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("Consultar.xhtml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<String> getColumna(List<List<String>> filas, int pos) {
@@ -128,5 +133,4 @@ public class Consultas {
     public void setNomColumnas(List<String> nomColumnas) {
         this.nomColumnas = nomColumnas;
     }
-
 }

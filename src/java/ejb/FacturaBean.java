@@ -7,6 +7,7 @@ package ejb;
 
 import Conexion.HibernateUtil;
 import dtos.FacturaDTO;
+import ejb.util.EJBBase;
 import entities.Factura;
 import entities.Item;
 import entities.ItemPk;
@@ -22,6 +23,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
@@ -33,18 +35,21 @@ import utilidades.Validaciones;
  */
 @ManagedBean(name = "FacturaBean")
 @SessionScoped
-public class FacturaBean {
+public class FacturaBean extends EJBBase {
 
     private List<FacturaDTO> listFac;
     private LeerCSV leerCsv;
 
     @PostConstruct
     public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        this.validarInicioSesion(ec);
+        
         leerCsv = LeerCSV.getInstance();
         if (!leerCsv.isFileLoad()) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Facturas.xhtml");
-                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+                ec.getSessionMap().put("Volver", "Facturas.xhtml");
+                ec.redirect("CargaArchivo.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
             }

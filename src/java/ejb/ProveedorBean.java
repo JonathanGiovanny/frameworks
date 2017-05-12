@@ -7,6 +7,7 @@ package ejb;
 
 import Conexion.HibernateUtil;
 import dtos.ProveedorDTO;
+import ejb.util.EJBBase;
 import entities.Proveedor;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
@@ -25,13 +27,16 @@ import utilidades.Validaciones;
  */
 @ManagedBean(name = "ProveedorBean")
 @SessionScoped
-public class ProveedorBean {
+public class ProveedorBean extends EJBBase {
 
     private List<ProveedorDTO> listProv;
     private LeerCSV leerCsv;
 
     @PostConstruct
     public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        this.validarInicioSesion(ec);
+        
         leerCsv = LeerCSV.getInstance();
         if (!leerCsv.isFileLoad()) {
             try {

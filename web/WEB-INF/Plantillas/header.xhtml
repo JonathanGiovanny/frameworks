@@ -12,6 +12,15 @@
             <img src="#{request.contextPath}/Recursos/Imagenes/Logo.PNG" />
             <h2>SUPERMERCADO LA CANASTICA</h2>
         </a>
+        <h:form>
+            <div class="infoUsuario">
+                <h:outputText value="#{LoginBean.nombre}"/> |
+                <h:outputText value="#{LoginBean.rol}"/> |
+                <p:commandLink id="salir" actionListener="#{LoginBean.cerrarSesion(actionEvent)}" ajax="false">
+                    <h:outputText value="Cerrar Sesión" />
+                </p:commandLink>
+            </div>
+        </h:form>
     </div>
 
     <div id="panelMenu" class="menu">

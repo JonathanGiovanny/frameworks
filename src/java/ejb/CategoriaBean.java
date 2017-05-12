@@ -7,6 +7,7 @@ package ejb;
 
 import Conexion.HibernateUtil;
 import dtos.CategoriaDTO;
+import ejb.util.EJBBase;
 import entities.Categoria;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
@@ -25,21 +27,25 @@ import utilidades.Validaciones;
  */
 @ManagedBean(name = "CategoriaBean")
 @SessionScoped
-public class CategoriaBean {
+public class CategoriaBean extends EJBBase {
 
     private List<CategoriaDTO> listCat;
     private LeerCSV leerCsv;
 
     @PostConstruct
     public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        this.validarInicioSesion(ec);
+
         leerCsv = LeerCSV.getInstance();
-        if (!leerCsv.isFileLoad()) {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Categorias.xhtml");
-                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
-            } catch (Exception e) {
-                e.printStackTrace();
+
+        try {
+            if (!leerCsv.isFileLoad()) {
+                ec.getSessionMap().put("Volver", "Categorias.xhtml");
+                ec.redirect("CargaArchivo.xhtml");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

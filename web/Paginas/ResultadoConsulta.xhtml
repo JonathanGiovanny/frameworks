@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title> SLC - Consultas </title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/Recursos/CSS/centro.css" />
+    </h:head>
+
+    <header>
+        <ui:include src="/WEB-INF/Plantillas/header.xhtml" />
+    </header>
+
+    <h:body>
+        <div id="panelCentro" class="panelCentro">
+            <div id="panelTitulo" class="panelTitulo" style="background-color: #16a085">
+                RESULTADO CONSULTAS
+            </div>
+
+            <div id="panelTabla" class="panelTabla">
+                #{Consultas.init()}
+                <div class="ui-datatable-scrollable-body" tabindex="-1" style="margin-right: 0px; width: 100%;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <ui:repeat value="#{ConsultasBean.nomColumnas}" var="h">
+                                    <th class="ui-state-default">#{h}</th>
+                                </ui:repeat>
+                            </tr>
+                        </thead>
+                        <tbody class="ui-datatable-data ui-widget-content">
+                            <c:forEach items="#{ConsultasBean.tabla}" var="fila">
+                                <tr>
+                                    <c:forEach items="#{fila}" var="celda">
+                                        <td>#{celda}</td>
+                                    </c:forEach>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h:form>
+                    <div id="panelBoton" class="panelBoton" align="center">
+                        <p:commandButton value="Regresar" actionListener="#{ConsultasBean.regresar(actionEvent)}" update=""/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>

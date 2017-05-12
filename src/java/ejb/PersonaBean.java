@@ -2,6 +2,7 @@ package ejb;
 
 import Conexion.HibernateUtil;
 import dtos.PersonaDTO;
+import ejb.util.EJBBase;
 import entities.Persona;
 import entities.TipoPersona;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
@@ -22,18 +24,21 @@ import utilidades.Validaciones;
  */
 @ManagedBean(name = "PersonaBean")
 @SessionScoped
-public class PersonaBean {
+public class PersonaBean extends EJBBase {
 
     private List<PersonaDTO> listPer;
     private LeerCSV leerCsv;
 
     @PostConstruct
     public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        this.validarInicioSesion(ec);
+        
         leerCsv = LeerCSV.getInstance();
         if (!leerCsv.isFileLoad()) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Personas.xhtml");
-                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+                ec.getSessionMap().put("Volver", "Personas.xhtml");
+                ec.redirect("CargaArchivo.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
             }

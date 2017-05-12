@@ -2,6 +2,7 @@ package ejb;
 
 import Conexion.HibernateUtil;
 import dtos.LugarDTO;
+import ejb.util.EJBBase;
 import entities.Lugar;
 import entities.TipoLugar;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.hibernate.Query;
 import utilidades.LeerCSV;
@@ -21,18 +23,21 @@ import utilidades.Validaciones;
  */
 @ManagedBean(name = "LugarBean")
 @SessionScoped
-public class LugarBean {
+public class LugarBean extends EJBBase {
 
     private List<LugarDTO> listLug;
         private LeerCSV leerCsv;
 
     @PostConstruct
     public void init() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        this.validarInicioSesion(ec);
+        
         leerCsv = LeerCSV.getInstance();
         if (!leerCsv.isFileLoad()) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Volver", "Lugares.xhtml");
-                FacesContext.getCurrentInstance().getExternalContext().redirect("CargaArchivo.xhtml");
+                ec.getSessionMap().put("Volver", "Lugares.xhtml");
+                ec.redirect("CargaArchivo.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
             }

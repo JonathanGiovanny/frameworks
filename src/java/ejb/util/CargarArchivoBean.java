@@ -6,8 +6,10 @@
 package ejb.util;
 
 import java.io.IOException;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -19,8 +21,13 @@ import utilidades.LeerCSV;
  */
 @ManagedBean(name = "CargarArchivoBean")
 @SessionScoped
-public class CargarArchivoBean {
+public class CargarArchivoBean extends EJBBase {
 
+    @PostConstruct
+    public void init(){
+        this.validarInicioSesion(FacesContext.getCurrentInstance().getExternalContext());
+    }
+    
     public void accionCargar(FileUploadEvent event) {
         UploadedFile archivo = event.getFile();
         LeerCSV l = LeerCSV.getInstance();

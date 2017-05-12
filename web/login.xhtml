@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Iniciar Sesion</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/Recursos/CSS/login.css" />
+    </h:head>
+    <h:body>
+        <div class="panelCentro">
+            <div class="logo">
+                <img src="Recursos/Imagenes/Logo.PNG"/>
+                <h1>Acceder</h1>
+            </div>
+            <h:form>
+                <div class="panelContenido">
+                    <br />
+                    <br />
+                    <p:inputText id="user" styleClass="" placeholder="Usuario" required="true" value="#{LoginBean.user}" maxlength="20"/>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <p:password id="pass" styleClass="" placeholder="Contraseña" required="true" value="#{LoginBean.pass}" maxlength="20"/>
+                    <br />
+                    <br />
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <br />
+                    <br />
+                    <div align="center">
+                        <p:commandButton value="Iniciar sesión" actionListener="#{LoginBean.iniciarSesion(actionEvent)}" />
+                    </div>
+                </div>
+            </h:form>
+            <footer class="footer">
+                <h5>Supermercado &#169; 2017</h5>
+            </footer>
+        </div>
+    </h:body>
+</html>
